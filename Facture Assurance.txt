@@ -16,6 +16,14 @@ Set oMontantAssurance = Form.field(fMontantAssurance)
 Set oMontantAPayer = Form.field(fMontantAPayer)
 
 '******************************************
+Sub Form_OnEnterTab(ByVal TabName)
+	Dim oxAddress
+	Set oxAddress = Form.Connection("Relates to", "Address")
+	oxAddress.SetConnection "Maxi.ch Assurances SA", ""
+End Sub
+'******************************************
+
+'******************************************
 Sub Form_OnLeaveField(ByVal FieldName)
    If FieldName = fMontantAssurance Then
        oMontantAPayer.Value = oMontantAssurance.Value
