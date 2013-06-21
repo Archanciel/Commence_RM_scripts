@@ -1,7 +1,8 @@
 $OBJECT=Form
 
-' Commence RM -- Factur Assurance Category / Main Form
-' Copyright © 2001 Commence Corporation. All Rights Reserved
+' Commence RM: Software Category / Main Form
+' Author: Jean-Pierre Schnyder
+' Date: 12-06-2013
 
 Option Explicit
 
