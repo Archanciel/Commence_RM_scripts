@@ -20,7 +20,11 @@ Set oMontantAPayer = Form.field(fMontantAPayer)
 Sub Form_OnEnterTab(ByVal TabName)
 	Dim oxAddress
 	Set oxAddress = Form.Connection("Relates to", "Address")
-	oxAddress.SetConnection "Maxi.ch Assurances SA", ""
+	
+	If oxAddress.ConnectedItemCount = 0 Then
+		'means we ar not editing an existing item, but trully creating a new one !
+		oxAddress.SetConnection "Maxi.ch Assurances SA", ""
+	End If
 End Sub
 '******************************************
 
