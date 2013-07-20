@@ -25,7 +25,7 @@ Set oAlarmChkBox = Form.field(fAlarm)
 '******************************************
 Sub Form_OnLeaveField(ByVal FieldName)
 	If FieldName = fType Then
-		If InStr(oTypeRadioGrp.Value,"Ench") Then	'WARN: since accented letter in Enchère prevents str comparison, InStr is used !
+		If InStr(oTypeRadioGrp.Value,"auct") Then	'WARN: since accented letter in Enchère prevents str comparison, InStr is used !
 			oOnLineChkBox.Value = 1
 		End If
 	ElseIf FieldName = fEtat Then
