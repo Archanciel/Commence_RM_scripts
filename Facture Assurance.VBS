@@ -22,7 +22,7 @@ Sub Form_OnEnterTab(ByVal TabName)
 	Set oxAddress = Form.Connection("Relates to", "Address")
 	
 	If oxAddress.ConnectedItemCount = 0 Then
-		'means we ar not editing an existing item, but trully creating a new one !
+		'means we ar not editing an existing item, but truly creating a new one !
 		oxAddress.SetConnection "Maxi.ch Assurances SA", ""
 	End If
 End Sub
