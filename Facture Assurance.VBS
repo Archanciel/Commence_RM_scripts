@@ -7,7 +7,7 @@ $OBJECT=Form
 Option Explicit
 
 
-Const fMontantAssurance = "Montant ass"
+Const fMontantAssurance = "Montant remb"
 Const fMontantAPayer = "A payer"
 
 Dim oMontantAssurance
