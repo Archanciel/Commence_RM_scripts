@@ -7,13 +7,13 @@ $OBJECT=Form
 Option Explicit
 
 
-Const fMontantAssurance = "Montant remb"
+Const fMontantRembours = "Montant remb"
 Const fMontantAPayer = "A payer"
 
-Dim oMontantAssurance
+Dim oMontantRembours
 Dim oMontantAPayer
 
-Set oMontantAssurance = Form.field(fMontantAssurance)
+Set oMontantRembours = Form.field(fMontantRembours)
 Set oMontantAPayer = Form.field(fMontantAPayer)
 
 '******************************************
@@ -30,8 +30,8 @@ End Sub
 
 '******************************************
 Sub Form_OnLeaveField(ByVal FieldName)
-   If FieldName = fMontantAssurance Then
-       oMontantAPayer.Value = oMontantAssurance.Value
+   If FieldName = fMontantRembours And oMontantAPayer.Value = "" Then
+       oMontantAPayer.Value = oMontantRembours.Value
    End If
 End Sub
 '******************************************
