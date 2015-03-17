@@ -22,8 +22,10 @@ Sub Form_OnEnterTab(ByVal TabName)
 	Set oxAddress = Form.Connection("Relates to", "Address")
 	
 	If oxAddress.ConnectedItemCount = 0 Then
-		'means we ar not editing an existing item, but truly creating a new one !
-		oxAddress.SetConnection "Maxi.ch Assurances SA", ""
+		'means we are not editing an existing item, but truly creating a new one !
+		'WARNING: due to the fact that the Address category has phone number as complimentary field,
+		'the connection to the Address item will not be set if it has a phone number !!!ü
+		oxAddress.SetConnection "Supra", ""
 	End If
 End Sub
 '******************************************
