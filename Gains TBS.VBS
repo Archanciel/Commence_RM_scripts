@@ -22,6 +22,7 @@ Sub Form_OnSave()
 	Set oDateProchGain = Form.field(fDateProchGain)
 
     If oDateGain.Value <> "" Then
+		'et uniqu si type gain est 25 % ou 28 % !!!
         dDate = DateAdd("d", 30, oDateGain.Value)
         oDateProchGain.Value = dDate
 	End If
