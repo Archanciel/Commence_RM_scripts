@@ -10,6 +10,7 @@ Option Explicit
 Const fDateGain = "Date gain"
 Const fDateProchGain = "Date prochain gain"
 Const fTypeGain = "Type gain"
+Const fNoGain = "No gain"
 Const GAIN_TYPE_BONUS_ACHAT_PACK_PAR_FILLEUL = "Bonus achat pack par filleul"
 Const GAIN_TYPE_BONUS_FILLEUL_UPGR_PREMIUM = "Bonus filleul upgr Premium"
 Const GAIN_TYPE_BONUS_FILLEUL_UPGR_SE = "Bonus filleul upgr SE"
@@ -19,6 +20,7 @@ Dim oDateGain
 Dim oDateProchGain
 Dim dDate
 Dim oTypeGain
+Dim oNoGain
 
 '******************************************
 'Sets date prochain gain 30 jours après date gainachat
@@ -27,8 +29,10 @@ Sub Form_OnSave()
 	Set oDateGain = Form.field(fDateGain)
 	Set oDateProchGain = Form.field(fDateProchGain)
 	Set oTypeGain = Form.field(fTypeGain)
+	Set oNoGain = Form.field(fNoGain)
 
-    If oDateGain.Value <> "" Then
+    If oDateGain.Value <> "" And oNoGain.Value < 12 Then
+		'si le no de gain est 12, c'est le dernier pour ce pack --> pas de prochain gain !
 		If oTypeGain.Value = GAIN_TYPE_BONUS_FILLEUL_UPGR_SE Then
 			'l'affiliation SE se renouvelle 360 j plus tard
 '			dDate = DateAdd("d", 360, oDateGain.Value)
