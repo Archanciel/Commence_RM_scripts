@@ -33,13 +33,15 @@ Sub Form_OnSave()
 
     If oDateGain.Value <> "" And oNoGain.Value < 12 Then
 		'si le no de gain est 12, c'est le dernier pour ce pack --> pas de prochain gain !
+		'pour les autres gains qui ne sont pas des gains de pack, le champ No de gain n'est pas utilisé et reste à 0.
 		If oTypeGain.Value = GAIN_TYPE_BONUS_FILLEUL_UPGR_SE Then
 			'l'affiliation SE se renouvelle 360 j plus tard
-'			dDate = DateAdd("d", 360, oDateGain.Value)
+			'dDate = DateAdd("d", 360, oDateGain.Value)
 			'le renouvellement de l'affiliation SE n'apporte pas de nouvesu bonus !
 			dDate = ""
 		Elseif oTypeGain.Value <> GAIN_TYPE_BONUS_ACHAT_PACK_PAR_FILLEUL And oTypeGain.Value <> GAIN_TYPE_BONUS_FILLEUL_UPGR_PREMIUM Then
-			'les gain dus à l'schat d'un pack par un filleul ne se produisent qu'une seule fois ! Idem pour l'upgrade en Premium !
+			'les gain dus à l'achat d'un pack par un filleul ne se produisent qu'une seule fois ! Idem pour l'upgrade en Premium !
+			'Ainsi, seul les gains 25 %, 28 % et les bonus des matrices Premium et SE ont une date de prochain gain !
 			dDate = DateAdd("d", 30, oDateGain.Value)
 		Else
 			dDate = ""
