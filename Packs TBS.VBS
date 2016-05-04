@@ -1,8 +1,14 @@
 $OBJECT=Form
 
+'******************************************
+' Packs TBS.VBS
+'******************************************
+
+'******************************************
 ' Commence RM: Software Category / Main Form
 ' Author: Jean-Pierre Schnyder
 ' Date: 08-12-2015
+'******************************************
 
 Option Explicit
 
@@ -36,14 +42,19 @@ Sub Form_OnSave()
 		'comparer avec le nombre 18 !
 		a = Split(oHeureAchat.Value,":")
 		dHeure = CDbl(a(0) & "." & a(1))
-		
-		If dHeure > 18 Then
+		'Un pack acheté entre 5.00 H et 17.00 -> gain 30 j + tard à 17.00 H
+		'Un pack acheté entre 17.00 H et minuit -> gain 31 j + tard à 5.00 H
+		'Un pack acheté entre minuit et 5.00 H -> gain 30 j + tard à 5.00 H
+		If dHeure >= 17 And dHeure <= 23.59 Then
+			dHeure = 5
 			dDate = DateAdd("d", 31, oDateAchat.Value)
-			dHeure = 6
-		Else
+		ElseIf dHeure >= 0 And dHeure < 5 Then
+			dHeure = 5
+			dDate = DateAdd("d", 30, oDateAchat.Value)
+		ElseIf dHeure >= 5 And dHeure < 17 Then
+			dHeure = 17
 			dDate = DateAdd("d", 30, oDateAchat.Value)
 		End If
-		
         oDatePremGain.Value = dDate
         oHeurePremGain.Value = dHeure
 	End If
