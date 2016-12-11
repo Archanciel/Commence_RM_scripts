@@ -1,8 +1,8 @@
 $OBJECT=Form
 
-' Commence RM: Letter Log Category / Main Form
+' Commence RM: In-out Category / GBC Form
 ' Author: Jean-Pierre Schnyder
-' Date: 10-06-2013
+' Date: 11-12-2016
 
 Option Explicit
 
