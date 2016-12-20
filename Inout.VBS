@@ -9,8 +9,8 @@ Option Explicit
 
 Const fMLM = "MLM"
 Const fNom = "Nom"
-Const fMBTC = "Montant BTC"
-Const fVCtrat = "Valeur contrat"
+Const fMBTC = "Coût BTC"
+Const fVCtrat = "Val ctrat BTC"
 Const fDExec = "Date exécution"
 Const fDOrdre = "Date ordre"
 
