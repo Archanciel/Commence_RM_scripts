@@ -13,6 +13,7 @@ Const fMBTC = "Coût BTC"
 Const fVCtrat = "Val ctrat BTC"
 Const fDExec = "Date exécution"
 Const fDOrdre = "Date ordre"
+Const fMoisOp = "Mois op"
 
 Dim oMLM
 Dim oNom
@@ -20,6 +21,7 @@ Dim oMBTC
 Dim oVCtrat
 Dim oDExec
 Dim oDOrdre
+Dim oMoisOp
 
 Set oMLM = Form.field(fMLM)
 Set oNom = Form.field(fNom)
@@ -27,10 +29,12 @@ Set oMBTC = Form.field(fMBTC)
 Set oVCtrat = Form.field(fVCtrat)
 Set oDExec = Form.field(fDExec)
 Set oDOrdre = Form.field(fDOrdre)
+Set oMoisOp = Form.field(fMoisOp)
 
 '******************************************
 Sub Form_OnLeaveField(ByVal FieldName)
 	Dim oxContrat
+	Dim strDateExec
 	Set oxContrat = Form.Connection("Concerne", "Contrat")
 
 	If FieldName = fMLM Then
@@ -56,8 +60,12 @@ Sub Form_OnLeaveField(ByVal FieldName)
 		End If
 
 		If FieldName = fDExec Then
+			strDateExec = oDExec.Value
 			If oDOrdre.Value = "" Then
-				oDOrdre.Value = oDExec.Value
+				oDOrdre.Value = strDateExec
+			End If
+			If oMoisOp.Value = "" Then
+				oMoisOp.Value = Mid(strDateExec,7,4) & Mid(strDateExec,4,2)
 			End If
 		End If
 	End If
