@@ -14,6 +14,7 @@ Const fVCtrat = "Val ctrat BTC"
 Const fDExec = "Date exécution"
 Const fDOrdre = "Date ordre"
 Const fMoisOp = "Mois op"
+Const fCreerAlarme = "Créer alarme"
 
 Dim oMLM
 Dim oNom
@@ -22,6 +23,7 @@ Dim oVCtrat
 Dim oDExec
 Dim oDOrdre
 Dim oMoisOp
+Dim oCreerAlarme
 
 Set oMLM = Form.field(fMLM)
 Set oNom = Form.field(fNom)
@@ -30,6 +32,7 @@ Set oVCtrat = Form.field(fVCtrat)
 Set oDExec = Form.field(fDExec)
 Set oDOrdre = Form.field(fDOrdre)
 Set oMoisOp = Form.field(fMoisOp)
+Set oCreerAlarme = Form.field(fCreerAlarme)
 
 '******************************************
 Sub Form_OnLeaveField(ByVal FieldName)
@@ -41,6 +44,7 @@ Sub Form_OnLeaveField(ByVal FieldName)
 		If oMLM.Value = "GBC" Then
 			If oNom.Value = "" Then
 				oNom.Value = "Approvionnement btcpourlavie"
+				oCreerAlarme.Value = 0
 			End If
 	
 			If oxContrat.ConnectedItemCount = 0 Then
@@ -65,7 +69,8 @@ Sub Form_OnLeaveField(ByVal FieldName)
 				oDOrdre.Value = strDateExec
 			End If
 			If oMoisOp.Value = "" Then
-				oMoisOp.Value = Mid(strDateExec,7,4) & Mid(strDateExec,4,2)
+				'oMoisOp.Value = yyyy-mm
+				oMoisOp.Value = Mid(strDateExec,7,4) & "-" & Mid(strDateExec,4,2)
 			End If
 		End If
 	End If
