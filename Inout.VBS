@@ -15,6 +15,8 @@ Const fDExec = "Date exécution"
 Const fDOrdre = "Date ordre"
 Const fMoisOp = "Mois op"
 Const fCreerAlarme = "Créer alarme"
+Const fInvDirectChkBox = "Inv direct"
+Const fFeesBTC = "Fees BTC"
 
 Dim oMLM
 Dim oNom
@@ -24,6 +26,8 @@ Dim oDExec
 Dim oDOrdre
 Dim oMoisOp
 Dim oCreerAlarme
+Dim oInvDirectChkBox
+Dim oFeesBTC
 
 Set oMLM = Form.field(fMLM)
 Set oNom = Form.field(fNom)
@@ -33,6 +37,8 @@ Set oDExec = Form.field(fDExec)
 Set oDOrdre = Form.field(fDOrdre)
 Set oMoisOp = Form.field(fMoisOp)
 Set oCreerAlarme = Form.field(fCreerAlarme)
+Set oInvDirectChkBox = Form.field(fInvDirectChkBox)
+Set oFeesBTC = Form.field(fFeesBTC)
 
 '******************************************
 Sub Form_OnLeaveField(ByVal FieldName)
@@ -74,5 +80,12 @@ Sub Form_OnLeaveField(ByVal FieldName)
 			End If
 		End If
 	End If
+	
+	If FieldName = fInvDirectChkBox Then
+		If oInvDirectChkBox.Value = 1 Then
+			oFeesBTC.Value = 0
+		End If
+	End If
+
 End Sub
 '******************************************
