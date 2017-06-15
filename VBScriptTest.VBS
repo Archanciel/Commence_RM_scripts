@@ -29,5 +29,36 @@ Sub Form_OnClick(ByVal ControlID)
 			btcRate = file.ReadAll
 			file.Close
 			oValue.Value = btcRate
+			updateAllRec btcRate
 		End If
+End Sub
+
+Sub updateAllRec(ByVal rate)
+	Dim CommenceDB	
+	Set CommenceDB = Application.Database
+
+	Dim cRec
+	Set cRec = CommenceDB.GetCursor(0, "VBScriptTest", 0)
+	
+	Dim nRec
+	nRec = cRec.RowCount()
+	
+	MsgBox "updating " & nRec & " records with value " & rate 
+	
+	If nRec > 0 Then
+		Set rRec = cRec.GetEditRowSet(nRec, 0)
+
+		Dim iNouvValeur: iNouvValeur = rRec.GetColumnIndex("Nouv valeur", 0)
+
+		For i = 1 To nRec
+			rRec.ModifyRow i - 1, iNouvValeur, rate, 0
+		Next
+
+		rRec.Commit 0
+		Set rRec = Nothing
+	Else
+		'empty
+	End If
+
+	Set cRec = Nothing
 End Sub
