@@ -121,12 +121,6 @@ End Function
 	
 '******************************************
 Private Sub calculateAndFillMontantUSD()
-	MsgBox "compute !"
-'oMontantUSD)
-'	si date exec == today
-'		use cours temps réel
-'	sinon get cours histo	
-
 	'Writing input args for the python file
 	Dim fso
 	Dim file
@@ -134,6 +128,7 @@ Private Sub calculateAndFillMontantUSD()
 	Set fso  = CreateObject("Scripting.FileSystemObject")
 	Set file = fso.CreateTextFile("c:\temp\input.txt", 1)
 
+	'writing rate date, BTC contract value, BTC fee value
 	file.write(oDExec.Value & vbCrLf)
 	file.write(oCoutBTC.Value & vbCrLf)
 	file.write(oFeesBTC.Value & vbCrLf)
@@ -152,9 +147,14 @@ Private Sub calculateAndFillMontantUSD()
 	'reading data collected by the python file
 	Dim usdAmountTotal
 	Dim usdChfRate
+	Dim statusMsg
 	
 	Set fso  = CreateObject("Scripting.FileSystemObject")
 	Set file = fso.OpenTextFile("c:\temp\output.txt", 1)
+
+	If Not file.AtEndOfStream Then
+		statusMsg = file.ReadLine
+	End If
 
 	If Not file.AtEndOfStream Then
 		usdAmountTotal = file.ReadLine
@@ -165,6 +165,8 @@ Private Sub calculateAndFillMontantUSD()
 	End If
 
 	file.Close
+	
+	MsgBox statusMsg 
 	
 	oMontantUSD.Value = usdAmountTotal
 	oCoursHistUsdChf.Value = usdChfRate 
