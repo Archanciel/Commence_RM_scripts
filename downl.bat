@@ -1,1 +1,1 @@
-python D:\Users\Jean-Pierre\OneDrive\Documents\Commence\VBScript\downloadRates.py
+python D:\Users\Jean-Pierre\OneDrive\Documents\Commence\VBScript\downloadXRatesFacade.py

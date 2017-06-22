@@ -50,6 +50,8 @@ def getXRate():
 
 	writeOutputParms(statusMsg, usdChfRate, usdTotalTransAmount)
 
+	return statusMsg, usdChfRate, usdTotalTransAmount   #for testing purposes
+
 
 def getHistoricalXRatesForDate(dateObj):
 	dateStart = dateObj
@@ -109,15 +111,19 @@ def cleanRate(rateStr):
 
 
 if __name__ == '__main__':
-    getXRate()
-    baseCur = 'BTC'
-    targetCur = 'USD'
-    print(baseCur + '/' + targetCur + ': ' + str(getRealTimeXRates(baseCur,targetCur)))
+	statusMsg, usdChfRate, usdTotalTransAmount = getXRate()
+	print("status msg: {0}".format(statusMsg))
+	print("USD/CHF hist rate: {0}".format(usdChfRate))
+	print("USD total trans amount: {0}".format(usdTotalTransAmount) + '\n')
 
-    baseCur = 'BTC'
-    targetCur = 'CHF'
-    print(baseCur + '/' + targetCur + ': ' + str(getRealTimeXRates(baseCur,targetCur)))
+	baseCur = 'BTC'
+	targetCur = 'USD'
+	print(baseCur + '/' + targetCur + ': ' + str(getRealTimeXRates(baseCur,targetCur)))
 
-    baseCur = 'USD'
-    targetCur = 'CHF'
-    print(baseCur + '/' + targetCur + ': ' + str(getRealTimeXRates(baseCur,targetCur)))
+	baseCur = 'BTC'
+	targetCur = 'CHF'
+	print(baseCur + '/' + targetCur + ': ' + str(getRealTimeXRates(baseCur,targetCur)))
+
+	baseCur = 'USD'
+	targetCur = 'CHF'
+	print(baseCur + '/' + targetCur + ': ' + str(getRealTimeXRates(baseCur,targetCur)))

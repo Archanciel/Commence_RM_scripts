@@ -104,7 +104,7 @@ Sub Form_OnLeaveField(ByVal FieldName)
 	   FieldName = fInvDirectChkBox Or _
 	   FieldName = fMontantUSD Then
 		If mustCalculateMontantUSD() Then
-			calculateAndFillMontantUSD
+			populateMontantUSDAndUSDCHFRate
 		End If
 	End If
 End Sub
@@ -120,7 +120,7 @@ End Function
 '******************************************
 	
 '******************************************
-Private Sub calculateAndFillMontantUSD()
+Private Sub populateMontantUSDAndUSDCHFRate()
 	'Writing input args for the python file
 	Dim fso
 	Dim file
