@@ -175,7 +175,7 @@ Private Sub populateMontantUSDAndUSDCHFRate()
 
 	file.Close
 	
-	MsgBox statusMsg 
+	MsgBox statusMsg, vbInformation 
 	
 	oMontantUSD.Value = usdAmountTotal
 	oCoursHistUsdChf.Value = usdChfRate 
@@ -217,38 +217,50 @@ Sub Form_OnClick(ByVal ControlID)
 
 		file.Close
 		
-		MsgBox statusMsg 
-'		updateAllRec btcUsdRate, usdChfRate
+		updateAllGBCInOutItems btcUsdRate, usdChfRate
 	End If
 End Sub
 
-Sub updateAllRec(ByVal rate)
+Sub updateAllGBCInOutItems(ByVal btcUsdRate, ByVal usdChfRate)
 	Dim CommenceDB	
 	Set CommenceDB = Application.Database
 
-	Dim cRec
-	Set cRec = CommenceDB.GetCursor(0, "VBScriptTest", 0)
-	
-	Dim nRec
-	nRec = cRec.RowCount()
-	
-	MsgBox "updating " & nRec & " records with value " & rate 
-	
-	If nRec > 0 Then
-		Set rRec = cRec.GetEditRowSet(nRec, 0)
+	Dim cursorInOut
+	Set cursorInOut = CommenceDB.GetCursor(0, "In-Out", 0)
 
-		Dim iNouvValeur: iNouvValeur = rRec.GetColumnIndex("Nouv valeur", 0)
+	cursorInOut.SetFilter "[ViewFilter(1,F,,MLM,Equal to,GBC,)]", 0
+ 
+	Dim nInOut
+	nInOut = cursorInOut.RowCount()
+	
+	Dim answer
+	answer = MsgBox("Updating " & nInOut & " records with BTC/USD real time xrate = " & btcUsdRate & " and USD/CHF real time xrate = " & usdChfRate & " ?", vbOkCancel + vbQuestion)
+	
+	if answer = vbOK Then
+		Dim rInOut
+		Set rInOut = cursorInOut.GetEditRowSet(nInOut, 0)
 
-		For i = 1 To nRec
-			rRec.ModifyRow i - 1, iNouvValeur, rate, 0
-		Next
+		Dim idxCoursActBTCUSD: idxCoursActBTCUSD = rInOut.GetColumnIndex(fCoursActBTCUSD, 0)
+		Dim idxCoursActUSDCHF: idxCoursActUSDCHF = rInOut.GetColumnIndex(fCoursActUSDCHF, 0)
+		Dim i
+		
+		If nInOut > 0 Then
+			For i = 1 To nInOut
+				rInOut.ModifyRow i - 1, idxCoursActBTCUSD, btcUsdRate, 0
+				rInOut.ModifyRow i - 1, idxCoursActUSDCHF, usdChfRate, 0
+			Next
 
-		rRec.Commit 0
-		Set rRec = Nothing
+			rInOut.Commit 0
+			Set rInOut = Nothing
+		Else
+			'empty
+		End If
+
+		Set cursorInOut = Nothing
+		
+		MsgBox "" & nInOut & " records updated with BTC/USD real time xrate = " & btcUsdRate & " and USD/CHF real time xrate = " & usdChfRate, vbInformation
 	Else
 		'empty
 	End If
-
-	Set cRec = Nothing
 End Sub
 
