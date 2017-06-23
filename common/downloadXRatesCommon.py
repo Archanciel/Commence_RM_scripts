@@ -11,7 +11,17 @@ import sys
 INPUT_PARMS_FILE_PATH = "c:/temp/input.txt"
 OUTPUT_FILE_NAME = "c:/temp/output.txt"
 
-def getXRate():
+def populateXRate():
+	'''
+	For Commence RM, get historical or real time values according to the date of the request.
+	If requested for current date, real time values are scrapped, otherwise, historical values
+	are obtained.
+
+	Inputs are obtained from a temp input file populated by Commence InOut VBScript. Outputs are
+	written to a temp output file which will be read by the same VBS script.
+
+	:return: statusMsg, usdChfRate, usdTotalTransAmount, for testing purpose only
+	'''
 	quandl.ApiConfig.api_key = "TzTJNAxsD45RySvjBduE"
 
 	statusMsg = 'SUCCESS - getting BTC/USD ({0}) and USD/CHF ({1}) rates at date {2} successful !'
@@ -48,9 +58,31 @@ def getXRate():
 
 	statusMsg = statusMsg.format(btcUsdPrice, usdChfRate, clearEOL(transDateDDMMYYYY))
 
-	writeOutputParms(statusMsg, usdChfRate, usdTotalTransAmount)
+	writeOutputParms(statusMsg, usdTotalTransAmount, usdChfRate)
 
 	return statusMsg, usdChfRate, usdTotalTransAmount   #for testing purposes
+
+
+def populateRealTimeXRate():
+	'''
+	For Commence RM, get real time values only.
+
+	No inputs are read in here. Outputs are written to a temp output file which
+	will be read by the InOut VBS script.
+
+	:return: statusMsg, btcUsdPrice, usdChfRate, for testing purpose only
+	'''
+	statusMsg = 'SUCCESS - getting BTC/USD ({0}) and USD/CHF ({1}) real time rates successful !'
+
+	#getting realtime rates
+	btcUsdPrice = getRealTimeXRates('BTC','USD')
+	usdChfRate = getRealTimeXRates('USD','CHF')
+
+	statusMsg = statusMsg.format(btcUsdPrice, usdChfRate)
+
+	writeOutputParms(statusMsg, btcUsdPrice, usdChfRate)
+
+	return statusMsg, btcUsdPrice, usdChfRate   #for testing purposes
 
 
 def getHistoricalXRatesForDate(dateObj):
@@ -74,11 +106,11 @@ def clearEOL(line):
 	return line.replace('\n', '')
 
 
-def writeOutputParms(statusMsg, usdChfRate, usdTotalTransAmount):
+def writeOutputParms(statusMsg, value1, value2):
 	with open(OUTPUT_FILE_NAME, 'w') as f:
 		f.write(statusMsg + "\n")
-		f.write(str(usdTotalTransAmount) + "\n")
-		f.write(str(usdChfRate) + "\n")
+		f.write(str(value1) + "\n")
+		f.write(str(value2) + "\n")
 
 
 from bs4 import BeautifulSoup
@@ -111,10 +143,10 @@ def cleanRate(rateStr):
 
 
 if __name__ == '__main__':
-	statusMsg, usdChfRate, usdTotalTransAmount = getXRate()
+	statusMsg, usdChfRate, usdTotalTransAmount = populateXRate()
 	print("status msg: {0}".format(statusMsg))
-	print("USD/CHF hist rate: {0}".format(usdChfRate))
 	print("USD total trans amount: {0}".format(usdTotalTransAmount) + '\n')
+	print("USD/CHF hist rate: {0}".format(usdChfRate))
 
 	baseCur = 'BTC'
 	targetCur = 'USD'
@@ -127,3 +159,8 @@ if __name__ == '__main__':
 	baseCur = 'USD'
 	targetCur = 'CHF'
 	print(baseCur + '/' + targetCur + ': ' + str(getRealTimeXRates(baseCur,targetCur)))
+
+	statusMsg, btcUsdPrice, usdChfRate = populateRealTimeXRate()
+	print("\nstatus msg: {0}".format(statusMsg))
+	print("BTC/USD real time rate: {0}".format(btcUsdPrice))
+	print("USD/CHF real time rate: {0}".format(usdChfRate))
