@@ -21,6 +21,9 @@ Const fCoutBTC = "Coût BTC"
 Const fMontantUSD = "Montant USD"
 Const fCoursHistUsdChf = "Cours hist USD/CHF"
 
+Const fCoursActBTCUSD = "Cours act BTC/USD"
+Const fCoursActUSDCHF = "Cours act USD/CHF"
+
 Dim oMLM
 Dim oNom
 Dim oMBTC
@@ -36,6 +39,9 @@ Dim oCoutBTC
 Dim oMontantUSD
 Dim oCoursHistUsdChf
 
+Dim oCoursActBTCUSD
+Dim oCoursActUSDCHF
+
 Set oMLM = Form.field(fMLM)
 Set oNom = Form.field(fNom)
 Set oMBTC = Form.field(fMBTC)
@@ -50,6 +56,9 @@ Set oFeesBTC = Form.field(fFeesBTC)
 Set oCoutBTC = Form.field(fCoutBTC)
 Set oMontantUSD = Form.field(fMontantUSD)
 Set oCoursHistUsdChf = Form.field(fCoursHistUsdChf)
+
+Set oCoursActBTCUSD = Form.field(fCoursActBTCUSD)
+Set oCoursActUSDCHF = Form.field(fCoursActUSDCHF)
 
 '******************************************
 Sub Form_OnLeaveField(ByVal FieldName)
@@ -139,7 +148,7 @@ Private Sub populateMontantUSDAndUSDCHFRate()
 	Dim strCommand
 	Dim WshShell
 	
-	strCommand = "D:\Users\Jean-Pierre\OneDrive\Documents\Commence\VBScript\downl.bat" 
+	strCommand = "D:\Users\Jean-Pierre\OneDrive\Documents\Commence\VBScript\getXRates.bat" 
 	Set WshShell = CreateObject("WScript.Shell") 
 	WshShell.Run strCommand,0,True
 	Set WshShell = Nothing
@@ -172,3 +181,71 @@ Private Sub populateMontantUSDAndUSDCHFRate()
 	oCoursHistUsdChf.Value = usdChfRate 
 End Sub
 '******************************************
+
+Sub Form_OnClick(ByVal ControlID)
+	If ControlID = "CommandButton1" Then
+
+		'executing python file to collect data
+		Dim strCommand
+		strCommand = "D:\Users\Jean-Pierre\OneDrive\Documents\Commence\VBScript\getRealTimeXRates.bat" 
+		Set WshShell = CreateObject("WScript.Shell") 
+		WshShell.Run strCommand,0,True
+		Set WshShell = Nothing
+
+		'reading data collected by the python file
+		Dim btcUsdRate
+		Dim usdChfRate
+		Dim statusMsg
+		
+		Set fso  = CreateObject("Scripting.FileSystemObject")
+		Set file = fso.OpenTextFile("c:\temp\output.txt", 1)
+
+		If Not file.AtEndOfStream Then
+			statusMsg = file.ReadLine
+		End If
+
+		If Not file.AtEndOfStream Then
+			btcUsdRate = file.ReadLine
+		End If
+
+		If Not file.AtEndOfStream Then
+			usdChfRate = file.ReadLine
+		End If
+
+		file.Close
+		
+		MsgBox statusMsg 
+'		updateAllRec btcUsdRate, usdChfRate
+	End If
+End Sub
+
+Sub updateAllRec(ByVal rate)
+	Dim CommenceDB	
+	Set CommenceDB = Application.Database
+
+	Dim cRec
+	Set cRec = CommenceDB.GetCursor(0, "VBScriptTest", 0)
+	
+	Dim nRec
+	nRec = cRec.RowCount()
+	
+	MsgBox "updating " & nRec & " records with value " & rate 
+	
+	If nRec > 0 Then
+		Set rRec = cRec.GetEditRowSet(nRec, 0)
+
+		Dim iNouvValeur: iNouvValeur = rRec.GetColumnIndex("Nouv valeur", 0)
+
+		For i = 1 To nRec
+			rRec.ModifyRow i - 1, iNouvValeur, rate, 0
+		Next
+
+		rRec.Commit 0
+		Set rRec = Nothing
+	Else
+		'empty
+	End If
+
+	Set cRec = Nothing
+End Sub
+
