@@ -187,6 +187,7 @@ Sub Form_OnClick(ByVal ControlID)
 
 		'executing python file to collect data
 		Dim strCommand
+		Dim WshShell
 		strCommand = "D:\Users\Jean-Pierre\OneDrive\Documents\Commence\VBScript\getRealTimeXRates.bat" 
 		Set WshShell = CreateObject("WScript.Shell") 
 		WshShell.Run strCommand,0,True
@@ -196,6 +197,8 @@ Sub Form_OnClick(ByVal ControlID)
 		Dim btcUsdRate
 		Dim usdChfRate
 		Dim statusMsg
+		Dim fso
+		Dim file
 		
 		Set fso  = CreateObject("Scripting.FileSystemObject")
 		Set file = fso.OpenTextFile("c:\temp\output.txt", 1)
