@@ -7,12 +7,15 @@ $OBJECT=Form
 Option Explicit
 
 
+Const fName = "Name"
 Const fMontantRembours = "Montant remb"
 Const fMontantAPayer = "A payer"
 
+Dim oName
 Dim oMontantRembours
 Dim oMontantAPayer
 
+Set oName = Form.field(fName)
 Set oMontantRembours = Form.field(fMontantRembours)
 Set oMontantAPayer = Form.field(fMontantAPayer)
 
@@ -32,8 +35,13 @@ End Sub
 
 '******************************************
 Sub Form_OnLeaveField(ByVal FieldName)
-   If FieldName = fMontantRembours And oMontantAPayer.Value = "" Then
-       oMontantAPayer.Value = oMontantRembours.Value
+   If FieldName = fMontantAPayer And oMontantAPayer.Value <> "" And oMontantRembours.Value = "" Then
+	    If InStr(UCase(oName.value), "PHARMACIE") Then
+			oMontantRembours.Value = oMontantAPayer.Value * 0.95
+		Else
+			oMontantRembours.Value = oMontantAPayer.Value
+		End If
    End If
 End Sub
 '******************************************
+
