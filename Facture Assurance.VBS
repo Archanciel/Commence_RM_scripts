@@ -37,7 +37,7 @@ End Sub
 Sub Form_OnLeaveField(ByVal FieldName)
    If FieldName = fMontantAPayer And oMontantAPayer.Value <> "" And oMontantRembours.Value = "" Then
 	    If InStr(UCase(oName.value), "PHARMACIE") Then
-			oMontantRembours.Value = oMontantAPayer.Value * 0.95
+			oMontantRembours.Value = oMontantAPayer.Value * 0.75
 	    ElseIf InStr(UCase(oName.value), "CMS") Then
 			oMontantRembours.Value = oMontantAPayer.Value * 0.90
 		Else
