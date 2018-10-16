@@ -37,19 +37,29 @@ End Sub
 '******************************************
 
 '******************************************
-Sub Form_OnLeaveField(ByVal FieldName)
-   If FieldName = fMontantAPayer And oMontantAPayer.Value <> "" And oMontantRembours.Value = "" Then
-	    If InStr(UCase(oName.value), "PHARMACIE") Then
+Sub computeReimbursedAmount()
+	If oMontantAPayer.Value <> "" And oMontantRembours.Value = "" Then
+		If InStr(UCase(oName.value), "PHARMACIE") Then
 			oMontantRembours.Value = oMontantAPayer.Value * 0.75
-	    ElseIf InStr(UCase(oName.value), "CMS") Then
+		ElseIf InStr(UCase(oName.value), "CMS") Then
 			oMontantRembours.Value = oMontantAPayer.Value * 0.90
 		Else
 			oMontantRembours.Value = oMontantAPayer.Value
 		End If
+	End If
+End Sub
+'******************************************
+
+'******************************************
+Sub Form_OnLeaveField(ByVal FieldName)
+   If FieldName = fMontantAPayer Then
+		Call computeReimbursedAmount()
    ElseIf FieldName = fRefuseChkBox Then
 	    If oRefuseChkBox.Value <> 0 Then
 		    oMontantRembours.Value = 0
 		Else
+			oMontantRembours.Value = ""
+			Call computeReimbursedAmount()
 		End If			
    End If
 End Sub
