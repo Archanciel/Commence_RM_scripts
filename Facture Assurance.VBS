@@ -10,14 +10,17 @@ Option Explicit
 Const fName = "Name"
 Const fMontantRembours = "Montant remb"
 Const fMontantAPayer = "A payer"
+Const fRefuseChkBox = "Refusé"
 
 Dim oName
 Dim oMontantRembours
 Dim oMontantAPayer
+Dim oRefuseChkBox
 
 Set oName = Form.field(fName)
 Set oMontantRembours = Form.field(fMontantRembours)
 Set oMontantAPayer = Form.field(fMontantAPayer)
+Set oRefuseChkBox = Form.field(fRefuseChkBox)
 
 '******************************************
 Sub Form_OnEnterTab(ByVal TabName)
@@ -43,6 +46,11 @@ Sub Form_OnLeaveField(ByVal FieldName)
 		Else
 			oMontantRembours.Value = oMontantAPayer.Value
 		End If
+   ElseIf FieldName = fRefuseChkBox Then
+	    If oRefuseChkBox.Value <> 0 Then
+		    oMontantRembours.Value = 0
+		Else
+		End If			
    End If
 End Sub
 '******************************************
