@@ -10,17 +10,20 @@ Option Explicit
 Const fName = "Name"
 Const fMontantRembours = "Montant remb"
 Const fMontantAPayer = "A payer"
-Const fRefuseChkBox = "Refusé"
+Const fRefuseChkBox = "Refusé" 'é requires ANSI file encoding !
+Const fRemboursChkBox = "Remboursé" 'é requires ANSI file encoding !
 
 Dim oName
 Dim oMontantRembours
 Dim oMontantAPayer
 Dim oRefuseChkBox
+Dim oRemboursChkBox
 
 Set oName = Form.field(fName)
 Set oMontantRembours = Form.field(fMontantRembours)
 Set oMontantAPayer = Form.field(fMontantAPayer)
 Set oRefuseChkBox = Form.field(fRefuseChkBox)
+Set oRemboursChkBox = Form.field(fRemboursChkBox)
 
 '******************************************
 Sub Form_OnEnterTab(ByVal TabName)
@@ -54,9 +57,14 @@ End Sub
 Sub Form_OnLeaveField(ByVal FieldName)
    If FieldName = fMontantAPayer Then
 		Call computeReimbursedAmount()
+   ElseIf FieldName = fRemboursChkBox Then
+	    If oRemboursChkBox.Value <> 0 Then
+			oRefuseChkBox.Value = 0
+		End If
    ElseIf FieldName = fRefuseChkBox Then
 	    If oRefuseChkBox.Value <> 0 Then
 		    oMontantRembours.Value = 0
+			oRemboursChkBox.Value = 0
 		Else
 			oMontantRembours.Value = ""
 			Call computeReimbursedAmount()
